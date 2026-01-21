@@ -13,5 +13,6 @@ export default {
 </script>
 
 <style>
+  @import "@/uni.scss";
 /*每个页面公共css */
 </style>

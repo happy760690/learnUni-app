@@ -1,48 +1,33 @@
 <template>
-  <view class="content">
-    <image class="logo" src="/static/logo.png"></image>
-    <view class="text-area">
-      <text class="title">{{ title }}</text>
-    </view>
+  <view class="page">
+    <text class="title">uni-app 模板首页</text>
+
+    <BaseButton @click="goDetail"> 去详情页 </BaseButton>
   </view>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      title: 'Hello',
-    }
-  },
-  onLoad() {},
-  methods: {},
-}
+<script setup>
+import BaseButton from "@/components/BaseButton.vue";
+
+let navigating = false;
+const goDetail = () => {
+  if (navigating) return;
+  navigating = true;
+  uni.navigateTo({
+    url: "/pages/detail/index?id=1",
+    complete: () => {
+      navigating = false;
+    },
+  });
+};
 </script>
 
-<style>
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+<style scoped lang="scss">
+.page {
+  padding: 32rpx;
 }
-
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50rpx;
-}
-
-.text-area {
-  display: flex;
-  justify-content: center;
-}
-
 .title {
   font-size: 36rpx;
-  color: #8f8f94;
+  margin-bottom: 40rpx;
 }
 </style>
