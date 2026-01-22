@@ -1,0 +1,37 @@
+import type { PermissionResult } from '@/types/permission'
+
+let cachedPermission: PermissionResult | null = null
+
+/**
+ * 检测用户信息权限（示例）
+ */
+export function checkUserInfoPermission(): Promise<PermissionResult> {
+  if (cachedPermission) {
+    return Promise.resolve(cachedPermission)
+  }
+
+  return new Promise((resolve) => {
+    // #ifdef MP-WEIXIN
+    uni.getSetting({
+      success: (res) => {
+        const granted = res.authSetting['scope.userInfo']
+        const result: PermissionResult = granted
+          ? { status: 'authorized' }
+          : { status: 'not-determined' }
+
+        cachedPermission = result
+        resolve(result)
+      },
+      fail: () => {
+        resolve({ status: 'denied' })
+      }
+    })
+    // #endif
+
+    // #ifdef H5
+    const result: PermissionResult = { status: 'authorized' }
+    cachedPermission = result
+    resolve(result)
+    // #endif
+  })
+}

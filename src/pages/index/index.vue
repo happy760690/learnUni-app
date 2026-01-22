@@ -21,6 +21,7 @@ import type { ListItem } from '@/types/list'
 import { useSystemInfo } from '@/utils/system'
 import { showSuccess } from '@/utils/toast'
 import { useNetworkInfo } from '@/utils/network'
+import { useUserInfoPermission } from '@/utils/permission'
 
 const list = ref<ListItem[]>([])
 
@@ -37,6 +38,22 @@ onMounted(() => {
 onMounted(async () => {
   const net = await useNetworkInfo()
   console.log('网络状态：', net)
+})
+
+onMounted(async () => {
+  const { status } = await useUserInfoPermission()
+  console.log(status)
+  if (status !== 'authorized') {
+    uni.showModal({
+      title: '权限提示',
+      content: '需要授权才能继续使用',
+      success: (res) => {
+        if (res.confirm) {
+          uni.openSetting()
+        }
+      }
+    })
+  }
 })
 
 
