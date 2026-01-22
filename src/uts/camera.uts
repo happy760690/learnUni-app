@@ -1,0 +1,31 @@
+import type { CameraResult } from '@/types/camera'
+
+/**
+ * 调用相机拍照
+ */
+export function takePhoto(): Promise<CameraResult> {
+  return new Promise((resolve, reject) => {
+    // #ifdef MP-WEIXIN
+    uni.chooseImage({
+      count: 1,
+      sourceType: ['camera'],
+      success: (res) => {
+        const file = res.tempFiles[0]
+        resolve({
+          tempFilePath: file.path,
+          size: file.size,
+          width: file.width || 0,
+          height: file.height || 0
+        })
+      },
+      fail: () => {
+        reject(new Error('Camera cancelled'))
+      }
+    })
+    // #endif
+
+    // #ifdef H5
+    reject(new Error('H5 camera not supported'))
+    // #endif
+  })
+}

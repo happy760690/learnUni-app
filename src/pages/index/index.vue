@@ -9,6 +9,9 @@
     >
       <text>{{ item.desc }}</text>
     </BaseCard>
+    <BaseButton @click="handleTakePhoto">
+    打开相机
+    </BaseButton>
   </view>
 </template>
 
@@ -22,6 +25,8 @@ import { useSystemInfo } from '@/utils/system'
 import { showSuccess } from '@/utils/toast'
 import { useNetworkInfo } from '@/utils/network'
 import { useUserInfoPermission } from '@/utils/permission'
+import { useCamera } from '@/utils/camera'
+import BaseButton from '@/components/BaseButton.vue'
 
 const list = ref<ListItem[]>([])
 
@@ -58,6 +63,13 @@ onMounted(async () => {
 
 
 onMounted(loadData)
+
+const handleTakePhoto = async () => {
+  const photo = await useCamera()
+  if (!photo) return
+
+  console.log('拍照结果', photo)
+}
 
 let navigating = false;
 const goDetail = (id: number): void => {

@@ -9,7 +9,7 @@ onLaunch(async () => {
 // 页面永远假设 App 已准备好
 </script>
 
-<style>
+<style lang="scss">
   @import "@/uni.scss";
 /*每个页面公共css */
 </style>
