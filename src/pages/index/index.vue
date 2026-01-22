@@ -19,11 +19,13 @@ import { goDetailPage } from '@/utils/navigation'
 import { fetchList } from '@/api/list'
 import type { ListItem } from '@/types/list'
 import { getPlatform } from '@/utils/platform'
+import { showSuccess } from '@/utils/toast'
 
 const list = ref<ListItem[]>([])
 
 const loadData = async (): Promise<void> => {
   list.value = await fetchList()
+  showSuccess('加载成功')
 }
 
 onMounted(() => {

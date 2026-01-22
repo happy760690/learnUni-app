@@ -14,7 +14,13 @@ export const request = <T = any>(
   return new Promise((resolve, reject) => {
     uni.request({
       ...options,
-      success: (res) => resolve(res.data as T),
+      success: (res) => {
+        if (res.statusCode === 200) {
+          resolve(res.data as T)
+        } else {
+          reject(new Error('请求失败'))
+        }
+      },
       fail: reject,
       complete: () => {
         if (showLoading) {
