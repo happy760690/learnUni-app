@@ -1,0 +1,33 @@
+import type { SystemInfo } from '@/types/system'
+
+/**
+ * 获取系统信息（uts）
+ * 只做平台能力，不做业务
+ */
+export function getSystemInfo(): SystemInfo {
+  // #ifdef MP-WEIXIN
+  const info = uni.getSystemInfoSync()
+  return {
+    platform: 'mp-weixin',
+    screenWidth: info.screenWidth,
+    screenHeight: info.screenHeight,
+    pixelRatio: info.pixelRatio
+  }
+  // #endif
+
+  // #ifdef H5
+  return {
+    platform: 'h5',
+    screenWidth: window.innerWidth,
+    screenHeight: window.innerHeight,
+    pixelRatio: window.devicePixelRatio
+  }
+  // #endif
+
+  return {
+    platform: 'unknown',
+    screenWidth: 0,
+    screenHeight: 0,
+    pixelRatio: 1
+  }
+}

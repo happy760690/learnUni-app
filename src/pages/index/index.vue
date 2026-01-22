@@ -18,7 +18,7 @@ import BaseCard from '@/components/BaseCard.vue'
 import { goDetailPage } from '@/utils/navigation'
 import { fetchList } from '@/api/list'
 import type { ListItem } from '@/types/list'
-import { getPlatform } from '@/utils/platform'
+import { useSystemInfo } from '@/utils/system'
 import { showSuccess } from '@/utils/toast'
 
 const list = ref<ListItem[]>([])
@@ -29,7 +29,8 @@ const loadData = async (): Promise<void> => {
 }
 
 onMounted(() => {
-  console.log('当前平台：', getPlatform())
+  const info = useSystemInfo()
+  console.log('系统信息：', info)
 })
 
 
