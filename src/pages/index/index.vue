@@ -1,35 +1,37 @@
 <template>
   <view class="page">
     <BaseCard
-      title="TS 组件卡片"
+      v-for="item in list"
+      :key="item.id"
+      :title="item.title"
       clickable
-      @click="goDetail"
+      @click="goDetail(item.id)"
     >
-      <text>这是内容区域</text>
-
-      <template #footer>
-        <BaseButton>
-          查看详情
-        </BaseButton>
-      </template>
+      <text>{{ item.desc }}</text>
     </BaseCard>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import BaseCard from '@/components/BaseCard.vue'
-import BaseButton from '@/components/BaseButton.vue'
 import { goDetailPage } from '@/utils/navigation'
+import { fetchList } from '@/api/list'
+import type { ListItem } from '@/types/list'
 
-// 明确类型
-const title = ref<string>('uni-app TS 首页')
+const list = ref<ListItem[]>([])
+
+const loadData = async (): Promise<void> => {
+  list.value = await fetchList()
+}
+
+onMounted(loadData)
 
 let navigating = false;
-const goDetail = (): void => {
+const goDetail = (id: number): void => {
   if (navigating) return;
   navigating = true;
-  goDetailPage(42).finally(() => {
+  goDetailPage(id).finally(() => {
     navigating = false;
   });
 }
