@@ -1,15 +1,24 @@
 <template>
   <view class="page">
-    <text class="title">{{ title }}</text>
+    <BaseCard
+      title="TS 组件卡片"
+      clickable
+      @click="goDetail"
+    >
+      <text>这是内容区域</text>
 
-    <BaseButton @click="goDetail">
-      去详情页（TS）
-    </BaseButton>
+      <template #footer>
+        <BaseButton>
+          查看详情
+        </BaseButton>
+      </template>
+    </BaseCard>
   </view>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import BaseCard from '@/components/BaseCard.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import { goDetailPage } from '@/utils/navigation'
 
