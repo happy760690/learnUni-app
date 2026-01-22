@@ -14,11 +14,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { onPullDownRefresh } from '@dcloudio/uni-app'
+import { onShow, onPullDownRefresh } from '@dcloudio/uni-app'
 import BaseCard from '@/components/BaseCard.vue'
 import { fetchList } from '@/api/list'
 import type { ListItem } from '@/types/list'
 import { goDetailPage } from '@/utils/navigation'
+import { checkAuth } from '@/utils/auth'
 
 const list = ref<ListItem[]>([])
 
@@ -31,6 +32,16 @@ const loadData = async (): Promise<void> => {
     uni.stopPullDownRefresh()
   }
 }
+
+onShow(() => {
+  const canAccess = checkAuth('/pages/list/index')
+  // if (!canAccess) return
+  if (!canAccess) {
+    uni.redirectTo({
+      url: '/pages/login/index?redirect=' + encodeURIComponent('/pages/list/index')
+    })
+  }
+})
 
 onMounted(loadData)
 onPullDownRefresh(loadData)

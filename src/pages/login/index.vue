@@ -18,14 +18,26 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 import BaseButton from '@/components/BaseButton.vue'
 import { login } from '@/api/auth'
 import { useUserStore } from '@/stores/user'
 
 const username = ref('')
 const password = ref('')
+const redirect = ref<string>('')
 
 const userStore = useUserStore()
+
+onLoad((query: Record<string, string>) => {
+  const raw = query.redirect || ''
+  try {
+    redirect.value = raw ? decodeURIComponent(raw) : ''
+  } catch (e) {
+    // fallback if decode fails
+    redirect.value = raw
+  }
+})
 
 const handleLogin = async (): Promise<void> => {
   try {
@@ -38,8 +50,15 @@ const handleLogin = async (): Promise<void> => {
 
     userStore.setToken(res.token)
 
+    console.log('redirect.value', redirect.value)
+    if (redirect.value) {
+        uni.redirectTo({
+            url: redirect.value
+        })
+    } else {
+        uni.navigateBack()
+    }
     uni.showToast({ title: '登录成功' })
-    uni.navigateBack()
   } catch (err: any) {
     uni.showToast({
       title: err.message || '登录失败',
