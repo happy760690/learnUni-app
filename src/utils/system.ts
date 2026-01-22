@@ -1,10 +1,18 @@
 import type { SystemInfo } from '@/types/system'
 import { getSystemInfo } from '@/uts/system.uts'
 
-/**
- * TS 层统一出口
- * 页面只接触这个
- */
+const defaultSystemInfo: SystemInfo = {
+  platform: 'unknown',
+  screenWidth: 0,
+  screenHeight: 0,
+  pixelRatio: 1
+}
+
 export const useSystemInfo = (): SystemInfo => {
-  return getSystemInfo()
+  try {
+    return getSystemInfo()
+  } catch (e) {
+    console.warn('getSystemInfo failed', e)
+    return defaultSystemInfo
+  }
 }

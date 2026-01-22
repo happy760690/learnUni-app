@@ -1,22 +1,29 @@
 import type { SystemInfo } from '@/types/system'
 
+let cachedSystemInfo: SystemInfo | null = null
+
 /**
- * 获取系统信息（uts）
- * 只做平台能力，不做业务
+ * 获取系统信息（带缓存）
  */
 export function getSystemInfo(): SystemInfo {
+  if (cachedSystemInfo) {
+    return cachedSystemInfo
+  }
+
+  let info: SystemInfo
+
   // #ifdef MP-WEIXIN
-  const info = uni.getSystemInfoSync()
-  return {
+  const res = uni.getSystemInfoSync()
+  info = {
     platform: 'mp-weixin',
-    screenWidth: info.screenWidth,
-    screenHeight: info.screenHeight,
-    pixelRatio: info.pixelRatio
+    screenWidth: res.screenWidth,
+    screenHeight: res.screenHeight,
+    pixelRatio: res.pixelRatio
   }
   // #endif
 
   // #ifdef H5
-  return {
+  info = {
     platform: 'h5',
     screenWidth: window.innerWidth,
     screenHeight: window.innerHeight,
@@ -24,10 +31,14 @@ export function getSystemInfo(): SystemInfo {
   }
   // #endif
 
-  return {
+  // 兜底
+  info = info || {
     platform: 'unknown',
     screenWidth: 0,
     screenHeight: 0,
     pixelRatio: 1
   }
+
+  cachedSystemInfo = info
+  return info
 }
