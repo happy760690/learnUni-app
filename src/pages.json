@@ -11,6 +11,11 @@
       "style": {
         "navigationBarTitleText": "详情页"
       }
+    },{
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
     },
     {
       "path": "pages/lifecycle/index",
