@@ -1,16 +1,18 @@
 <template>
   <view class="page">
-    <text>详情页，id：{{ id }}</text>
+    <text>详情页 ID：{{ id }}</text>
   </view>
 </template>
 
-<script setup>
-import { ref } from "vue";
-import { onLoad } from "@dcloudio/uni-app";
+<script setup lang="ts">
+import { ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 
-const id = ref("");
+// 明确类型
+const id = ref<number | null>(null)
 
-onLoad((query) => {
-  id.value = query.id;
-});
+// query 默认是 Record<string, string>
+onLoad((query: Record<string, string>) => {
+  id.value = Number(query.id)
+})
 </script>
