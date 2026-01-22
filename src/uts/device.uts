@@ -1,0 +1,15 @@
+/**
+ * 获取设备平台（uts）
+ * 只做能力，不做业务
+ */
+export function getDevicePlatform(): string {
+  // #ifdef MP-WEIXIN
+  return 'mp-weixin'
+  // #endif
+
+  // #ifdef H5
+  return 'h5'
+  // #endif
+
+  return 'unknown'
+}

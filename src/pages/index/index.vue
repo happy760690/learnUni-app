@@ -18,12 +18,18 @@ import BaseCard from '@/components/BaseCard.vue'
 import { goDetailPage } from '@/utils/navigation'
 import { fetchList } from '@/api/list'
 import type { ListItem } from '@/types/list'
+import { getPlatform } from '@/utils/platform'
 
 const list = ref<ListItem[]>([])
 
 const loadData = async (): Promise<void> => {
   list.value = await fetchList()
 }
+
+onMounted(() => {
+  console.log('当前平台：', getPlatform())
+})
+
 
 onMounted(loadData)
 
