@@ -1,0 +1,42 @@
+import type { NetworkInfo } from '@/types/system'
+
+let cachedNetworkInfo: NetworkInfo | null = null
+
+/**
+ * 获取网络信息（异步）
+ */
+export function getNetworkInfo(): Promise<NetworkInfo> {
+  if (cachedNetworkInfo) {
+    return Promise.resolve(cachedNetworkInfo)
+  }
+
+  return new Promise((resolve) => {
+    // #ifdef MP-WEIXIN
+    uni.getNetworkType({
+      success: (res) => {
+        const info: NetworkInfo = {
+          networkType: res.networkType as any,
+          isConnected: res.networkType !== 'none'
+        }
+        cachedNetworkInfo = info
+        resolve(info)
+      },
+      fail: () => {
+        resolve({
+          networkType: 'unknown',
+          isConnected: false
+        })
+      }
+    })
+    // #endif
+
+    // #ifdef H5
+    const info: NetworkInfo = {
+      networkType: 'wifi',
+      isConnected: true
+    }
+    cachedNetworkInfo = info
+    resolve(info)
+    // #endif
+  })
+}

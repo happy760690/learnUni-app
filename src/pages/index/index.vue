@@ -20,6 +20,7 @@ import { fetchList } from '@/api/list'
 import type { ListItem } from '@/types/list'
 import { useSystemInfo } from '@/utils/system'
 import { showSuccess } from '@/utils/toast'
+import { useNetworkInfo } from '@/utils/network'
 
 const list = ref<ListItem[]>([])
 
@@ -31,6 +32,11 @@ const loadData = async (): Promise<void> => {
 onMounted(() => {
   const info = useSystemInfo()
   console.log('系统信息：', info)
+})
+
+onMounted(async () => {
+  const net = await useNetworkInfo()
+  console.log('网络状态：', net)
 })
 
 

@@ -8,3 +8,8 @@ export interface SystemInfo {
   screenHeight: number
   pixelRatio: number
 }
+
+export interface NetworkInfo {
+  networkType: 'wifi' | '4g' | '5g' | 'unknown'
+  isConnected: boolean
+}
