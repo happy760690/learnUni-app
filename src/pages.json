@@ -25,6 +25,12 @@
       }
     },
     {
+      "path": "pages/uploadFile/index",
+      "style": {
+        "navigationBarTitleText": "文件上传"
+      }
+    },
+    {
       "path": "pages/lifecycle/index",
       "style": {
         "navigationBarTitleText": "生命周期"
