@@ -12,6 +12,15 @@
     <BaseButton @click="handleTakePhoto">
     打开相机
     </BaseButton>
+    <BaseButton @click="handlePickFile">
+    选择文件
+    </BaseButton>
+    <BaseButton @click="handlePickImage">
+    选择图片
+    </BaseButton>
+    <BaseButton @click="handleUpload">
+    上传图片
+    </BaseButton>
   </view>
 </template>
 
@@ -27,6 +36,8 @@ import { useNetworkInfo } from '@/utils/network'
 import { useUserInfoPermission } from '@/utils/permission'
 import { useCamera } from '@/utils/camera'
 import BaseButton from '@/components/BaseButton.vue'
+import { useFilePicker } from '@/utils/file'
+import { pickAndUpload } from '@/utils/fileFlow'
 
 const list = ref<ListItem[]>([])
 
@@ -64,6 +75,20 @@ onMounted(async () => {
 
 onMounted(loadData)
 
+const handleUpload = async () => {
+  const files = await pickAndUpload('image')
+  console.log('上传结果', files)
+}
+
+const handlePickImage = async () => {
+  const files = await useFilePicker('image')
+  console.log('选择的图片', files)
+}
+
+const handlePickFile = async () => {
+  const files = await useFilePicker('file')
+  console.log('选择的文件', files)
+}
 const handleTakePhoto = async () => {
   const photo = await useCamera()
   if (!photo) return
