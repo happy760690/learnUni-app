@@ -1,0 +1,76 @@
+import type { LocationResult } from '@/types/location'
+
+/**
+ * 获取当前位置
+ */
+export function getCurrentLocation(): Promise<LocationResult> {
+  return new Promise((resolve) => {
+    // #ifdef MP-WEIXIN
+    uni.getSetting({
+      success: (setting) => {
+        const granted = setting.authSetting['scope.userLocation']
+
+        if (!granted) {
+          resolve({
+            success: false,
+            error: 'no-permission'
+          })
+          return
+        }
+
+        uni.getLocation({
+          type: 'wgs84',
+          success: (res) => {
+            resolve({
+              success: true,
+              latitude: res.latitude,
+              longitude: res.longitude
+            })
+          },
+          fail: (err) => {
+            resolve({
+              success: false,
+              error:
+                err.errMsg.includes('timeout')
+                  ? 'timeout'
+                  : 'unavailable'
+            })
+          }
+        })
+      },
+      fail: () => {
+        resolve({
+          success: false,
+          error: 'denied'
+        })
+      }
+    })
+    // #endif
+
+    // #ifdef H5
+    if (!navigator.geolocation) {
+      resolve({
+        success: false,
+        error: 'unavailable'
+      })
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        resolve({
+          success: true,
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude
+        })
+      },
+      () => {
+        resolve({
+          success: false,
+          error: 'denied'
+        })
+      }
+    )
+    // #endif
+  })
+}
